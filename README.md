@@ -1,0 +1,2 @@
+- docker-compose up --build --force-recreate --no-deps
+- ./mountebank-setup/00-import.sh

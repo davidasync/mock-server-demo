@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+  servicea:
+    build: .
+    command: node service-a/index.js
+    ports: 
+      - "29203:29203"
+    expose:
+      - "29203"
+  serviceb:
+    build: .
+    command: node service-b/index.js
+    ports: 
+      - "61101:61101"
+    expose:
+      - "61101"
+  mountebank:
+    container_name: mountebank
+    image: jkris/mountebank:2.2.1
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+    volumes:
+      - ./:/repository
+    ports:
+      - 2525:2525
+      - 51101:51101
+    expose:
+      - "2525"
+      - "61101"
+    command: --datadir /repository/mountebank-mbdb --allowInjection --loglevel debug
+  dummy:
+    image: jmervine/noop-server
+    depends_on:
+      - mountebank

@@ -1,0 +1,43 @@
+{
+  "stub": {
+    "responses": [
+      {
+        "proxy": {
+          "to": "http://serviceb:61101",
+          "predicateGenerators": [
+            {
+              "matches": {
+                "path": true
+              }
+            },
+            {
+              "matches": {
+                "body": true
+              },
+              "jsonpath": {
+                "selector": "$..jsonrpc"
+              },
+              "caseSensitive": true
+            },
+            {
+              "matches": {
+                "body": true
+              },
+              "jsonpath": {
+                "selector": "$..method"
+              },
+              "caseSensitive": true
+            },
+            {
+              "inject" : "function (config) {const stringify = require('json-stable-stringify'); var injected = null; if (config.request.body) { const params = stringify(JSON.parse(config.request.body).params); injected = \"function (request, logger) {const stringify = require('json-stable-stringify');const params = stringify(JSON.parse(request.body).params);return params === '\" + params + \"'}\"; } return [{\"inject\" : injected}];}"
+            }
+          ],
+          "injectHeaders": {
+            "Accept-Encoding": "identity"
+          },
+          "addDecorateBehavior": "(config) => { var reqJson = JSON.parse(config.request.body); var resJson = JSON.parse(config.response.body); resJson.id = reqJson.id; config.response.body = JSON.stringify(resJson); }"
+        }
+      }
+    ]
+  }
+}

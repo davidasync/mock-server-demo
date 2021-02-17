@@ -1,0 +1,18 @@
+{
+	"jsonrpc": "2.0",
+	"method": "getAccomUserProfile",
+	"params": [
+    {
+      "profileIds": [
+        21953712,
+        10252858,
+        10254085,
+        21959334,
+        21905058
+      ],
+      "withActivitySummary": true
+    }
+  ],
+	"id": 1,
+	"source": "postman"
+}
